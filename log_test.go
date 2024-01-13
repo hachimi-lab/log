@@ -15,7 +15,7 @@ func TestLog(t *testing.T) {
 		log.WithDisableStacktrace(false),
 	).Store(
 		"./logs/hachimi-lab.log",
-		log.StoreWithRotateTime(log.StoreEveryDay),
+		log.StoreWithRotateType(log.RotateEveryDay),
 		log.StoreWithMaxAge(time.Hour*24*7),
 	).Build()
 	if err != nil {

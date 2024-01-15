@@ -1,157 +1,64 @@
 package log
 
 import (
-	"io"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
 type (
-	Option           func(config *zap.Config)
-	LevelEncoder     = zapcore.LevelEncoder
-	TimeEncoder      = zapcore.TimeEncoder
-	DurationEncoder  = zapcore.DurationEncoder
-	CallerEncoder    = zapcore.CallerEncoder
-	NameEncoder      = zapcore.NameEncoder
-	ReflectedEncoder = zapcore.ReflectedEncoder
-	SamplingConfig   = zap.SamplingConfig
+	Option         = zap.Option
+	Core           = zapcore.Core
+	Clock          = zapcore.Clock
+	Entry          = zapcore.Entry
+	CheckWriteHook = zapcore.CheckWriteHook
+	CheckedEntry   = zapcore.CheckedEntry
+	LevelEnabler   = zapcore.LevelEnabler
 )
 
-func WithLevel(level Level) Option {
-	return func(config *zap.Config) {
-		config.Level.SetLevel(level)
-	}
+func BuildWithWrapCore(fn func(Core) Core) Option {
+	return zap.WrapCore(fn)
 }
 
-func WithDevelopment(development bool) Option {
-	return func(config *zap.Config) {
-		config.Development = development
-	}
+func BuildWithHooks(hooks ...func(entry Entry) error) Option {
+	return zap.Hooks(hooks...)
 }
 
-func WithDisableCaller(disableCaller bool) Option {
-	return func(config *zap.Config) {
-		config.DisableCaller = disableCaller
-	}
+func BuildWithFields(fs ...Field) Option {
+	return zap.Fields(fs...)
 }
 
-func WithDisableStacktrace(disableStacktrace bool) Option {
-	return func(config *zap.Config) {
-		config.DisableStacktrace = disableStacktrace
-	}
+func BuildWithErrorOutput(w WriteSyncer) Option {
+	return zap.ErrorOutput(w)
 }
 
-func WithSampling(sampling *SamplingConfig) Option {
-	return func(config *zap.Config) {
-		config.Sampling = sampling
-	}
+func BuildWithDevelopment() Option {
+	return zap.Development()
 }
 
-func WithEncoding(encoding Encoding) Option {
-	return func(config *zap.Config) {
-		config.Encoding = encoding
-	}
+func BuildWithAddCaller() Option {
+	return zap.AddCaller()
 }
 
-func WithEncoderMessageKey(encoderMessageKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.MessageKey = encoderMessageKey
-	}
+func BuildWithCaller(enabled bool) Option {
+	return zap.WithCaller(enabled)
 }
 
-func WithEncoderLevelKey(encoderLevelKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.LevelKey = encoderLevelKey
-	}
+func BuildWithAddCallerSkip(skip int) Option {
+	return zap.AddCallerSkip(skip)
 }
 
-func WithEncoderTimeKey(encoderTimeKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.TimeKey = encoderTimeKey
-	}
+func BuildWithAddStacktrace(lvl LevelEnabler) Option {
+	return zap.AddStacktrace(lvl)
 }
 
-func WithEncoderNameKey(encoderNameKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.NameKey = encoderNameKey
-	}
+func BuildWithIncreaseLevel(lvl Level) Option {
+	return zap.IncreaseLevel(lvl)
 }
 
-func WithEncoderCallerKey(encoderCallerKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.CallerKey = encoderCallerKey
-	}
+func BuildWithFatalHook(hook CheckWriteHook) Option {
+	return zap.WithFatalHook(hook)
 }
 
-func WithEncoderFunctionKey(encoderFunctionKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.FunctionKey = encoderFunctionKey
-	}
-}
-
-func WithEncoderStacktraceKey(encoderStacktraceKey string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.StacktraceKey = encoderStacktraceKey
-	}
-}
-
-func WithEncoderLineEnding(encoderLineEnding string) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.LineEnding = encoderLineEnding
-	}
-}
-
-func WithEncoderLevel(encoderLevel LevelEncoder) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.EncodeLevel = encoderLevel
-	}
-}
-
-func WithEncoderTime(encoderTime TimeEncoder) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.EncodeTime = encoderTime
-	}
-}
-
-func WithEncoderDuration(encoderDuration DurationEncoder) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.EncodeDuration = encoderDuration
-	}
-}
-
-func WithEncoderCaller(encoderCaller CallerEncoder) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.EncodeCaller = encoderCaller
-	}
-}
-
-func WithEncoderName(encoderName NameEncoder) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.EncodeName = encoderName
-	}
-}
-
-func WithEncoderNewReflectedEncoder(encoderNewReflectedEncoder func(io.Writer) ReflectedEncoder) Option {
-	return func(config *zap.Config) {
-		config.EncoderConfig.NewReflectedEncoder = encoderNewReflectedEncoder
-	}
-}
-
-func WithOutputPaths(outputPaths ...string) Option {
-	return func(config *zap.Config) {
-		config.OutputPaths = outputPaths
-	}
-}
-
-func WithErrorOutputPaths(errorOutputPaths ...string) Option {
-	return func(config *zap.Config) {
-		config.ErrorOutputPaths = errorOutputPaths
-	}
-}
-
-func WithInitialFields(initialFields map[string]interface{}) Option {
-	return func(config *zap.Config) {
-		config.InitialFields = initialFields
-	}
+func BuildWithClock(clock Clock) Option {
+	return zap.WithClock(clock)
 }

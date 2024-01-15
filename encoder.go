@@ -16,7 +16,7 @@ type Encoder struct {
 	err      error
 }
 
-func New(opts ...Option) *Encoder {
+func New(cfg ...Config) *Encoder {
 	config := &zap.Config{
 		Level:             zap.NewAtomicLevelAt(zap.DebugLevel),
 		Development:       true,
@@ -44,8 +44,8 @@ func New(opts ...Option) *Encoder {
 		ErrorOutputPaths: []string{"stderr"},
 	}
 
-	for _, opt := range opts {
-		opt(config)
+	for _, v := range cfg {
+		v(config)
 	}
 
 	if len(config.Encoding) == 0 {
@@ -100,7 +100,7 @@ func (slf *Encoder) Extend(writeSyncer WriteSyncer, levelEnabler ...LevelEnabler
 	return slf
 }
 
-func (slf *Encoder) Build(options ...Builder) (*Logger, error) {
+func (slf *Encoder) Build(options ...Option) (*Logger, error) {
 	if slf.err != nil {
 		return nil, slf.err
 	}
@@ -113,7 +113,5 @@ func (slf *Encoder) Build(options ...Builder) (*Logger, error) {
 		return zapcore.NewTee(append(slf.cores, core)...)
 	}))
 	ins = ins.WithOptions(options...)
-	return &Logger{
-		internal: ins,
-	}, nil
+	return &Logger{ins}, nil
 }

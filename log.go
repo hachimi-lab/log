@@ -13,6 +13,24 @@ func (slf *Logger) Named(name string) *Logger {
 	return slf
 }
 
+func (slf *Logger) With(fields ...Field) *Logger {
+	return &Logger{
+		internal: slf.internal.With(fields...),
+	}
+}
+
+func (slf *Logger) WithLazy(fields ...Field) *Logger {
+	return &Logger{
+		internal: slf.internal.WithLazy(fields...),
+	}
+}
+
+func (slf *Logger) WithOptions(opts ...Option) *Logger {
+	return &Logger{
+		internal: slf.internal.WithOptions(opts...),
+	}
+}
+
 func (slf *Logger) Debug(msg string, fields ...Field) {
 	slf.internal.Debug(msg, fields...)
 }

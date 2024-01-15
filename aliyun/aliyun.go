@@ -4,8 +4,8 @@ import (
 	"time"
 
 	sls "github.com/aliyun/aliyun-log-go-sdk"
-	"github.com/gogo/protobuf/proto"
 	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
 )
 
 type Config struct {

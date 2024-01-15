@@ -7,19 +7,18 @@ import (
 )
 
 type (
-	RotateType  = rotatelogs.RotateType
+	TimePeriod  = rotatelogs.TimePeriod
 	StoreOption = rotatelogs.Option
-	RotateTime  = rotatelogs.RotateType
 )
 
 const (
-	RotateEveryMinute = rotatelogs.EveryMinute
-	RotateEveryHour   = rotatelogs.EveryHour
-	RotateEveryDay    = rotatelogs.EveryDay
+	Minutely = rotatelogs.Minutely
+	Hourly   = rotatelogs.Hourly
+	Daily    = rotatelogs.Daily
 )
 
-func StoreWithRotateType(rotateType RotateType) StoreOption {
-	return rotatelogs.WithRotateType(rotateType)
+func StoreWithTimePeriod(timePeriod TimePeriod) StoreOption {
+	return rotatelogs.WithTimePeriod(timePeriod)
 }
 
 func StoreWithMaxAge(maxAge time.Duration) StoreOption {

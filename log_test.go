@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/hachimi-lab/log"
+	"github.com/hachimi-lab/log/aliyun"
+	"github.com/hachimi-lab/rotatelogs"
 )
 
 func TestLog(t *testing.T) {
@@ -13,10 +15,15 @@ func TestLog(t *testing.T) {
 		log.WithDevelopment(false),
 		log.WithLevel(log.InfoLevel),
 		log.WithDisableStacktrace(false),
-	).Store(
-		"./logs/hachimi-lab.log",
-		log.StoreWithTimePeriod(log.Daily),
-		log.StoreWithMaxAge(time.Hour*24*7),
+	).Extend(
+		rotatelogs.New(
+			"./logs/hachimi-lab.log",
+			rotatelogs.WithTimePeriod(rotatelogs.Daily),
+			rotatelogs.WithMaxAge(time.Hour*24*7),
+		),
+	).Extend(
+		aliyunlog.New(aliyunlog.Config{}),
+		log.ErrorLevel,
 	).Build()
 	if err != nil {
 		stdlog.Fatal(err)

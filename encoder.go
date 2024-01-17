@@ -1,9 +1,9 @@
 package log
 
 import (
+	"io"
 	"time"
 
-	"github.com/hachimi-lab/rotatelogs"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -32,6 +32,7 @@ func New(cfg ...Config) *Encoder {
 			TimeKey:       "ts",
 			NameKey:       "name",
 			CallerKey:     "caller",
+			FunctionKey:   "func",
 			StacktraceKey: "stack",
 			EncodeLevel:   zapcore.CapitalLevelEncoder,
 			EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
@@ -69,34 +70,18 @@ func New(cfg ...Config) *Encoder {
 	return encoder
 }
 
-func (slf *Encoder) Store(logPath string, opts ...StoreOption) *Encoder {
-	if slf.err != nil {
-		return slf
-	}
-	writer, err := rotatelogs.New(logPath, opts...)
-	if err != nil {
-		slf.err = err
-		return slf
-	}
-	slf.cores = append(slf.cores,
-		zapcore.NewCore(slf.internal, NewWriteSyncer(writer), slf.config.Level.Level()),
-	)
-	return slf
-}
-
-func (slf *Encoder) Extend(writeSyncer WriteSyncer, levelEnabler ...LevelEnabler) *Encoder {
-	if slf.err != nil {
-		return slf
-	}
-	if writeSyncer == nil {
+func (slf *Encoder) Extend(writer io.Writer, lvlEnabler ...LevelEnabler) *Encoder {
+	if slf.err != nil || writer == nil {
 		return slf
 	}
 	var enabler LevelEnabler
 	enabler = slf.config.Level
-	if len(levelEnabler) > 0 {
-		enabler = levelEnabler[0]
+	if len(lvlEnabler) > 0 {
+		enabler = lvlEnabler[0]
 	}
-	slf.cores = append(slf.cores, zapcore.NewCore(slf.internal, writeSyncer, enabler))
+	slf.cores = append(slf.cores,
+		zapcore.NewCore(slf.internal, zapcore.AddSync(writer), enabler),
+	)
 	return slf
 }
 

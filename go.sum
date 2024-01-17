@@ -150,6 +150,8 @@ github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgf
 github.com/grpc-ecosystem/grpc-gateway v1.9.5/go.mod h1:vNeuVxBJEsws4ogUvrchl83t/GYV9WGTSLVdBhOQFDY=
 github.com/hachimi-lab/rotatelogs v0.0.0-20240115053645-c3b32670b15e h1:b3aslKZhDOfKMSIww4UBkXcBve6jdZX6ktj0wMCFOsg=
 github.com/hachimi-lab/rotatelogs v0.0.0-20240115053645-c3b32670b15e/go.mod h1:DLnCj645IVtlXQrFf1GH+NAyPGvyYYqyGLNHJbQRDac=
+github.com/hachimi-lab/rotatelogs v0.0.0-20240116101233-c230a7f06d4b h1:/bWM6M5YS77yU955vof/vejcArEkZ0dUTfXxDRByIhE=
+github.com/hachimi-lab/rotatelogs v0.0.0-20240116101233-c230a7f06d4b/go.mod h1:DLnCj645IVtlXQrFf1GH+NAyPGvyYYqyGLNHJbQRDac=
 github.com/hashicorp/consul/api v1.3.0/go.mod h1:MmDNSzIMUjNpY/mQ398R4bk2FnqQLoPndWW5VkKPlCE=
 github.com/hashicorp/consul/sdk v0.3.0/go.mod h1:VKf9jXwCTEY1QZP2MOLRhb5i/I/ssyNV1vwHyQBF0x8=
 github.com/hashicorp/errwrap v1.0.0/go.mod h1:YH+1FKiLXxHSkmPseP+kNlulaMuP3n2brvKWEqk/Jc4=

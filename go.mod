@@ -4,7 +4,7 @@ go 1.21.4
 
 require (
 	github.com/aliyun/aliyun-log-go-sdk v0.1.68
-	github.com/hachimi-lab/rotatelogs v0.0.0-20240115053645-c3b32670b15e
+	github.com/hachimi-lab/rotatelogs v0.0.0-20240116101233-c230a7f06d4b
 	github.com/pkg/errors v0.9.1
 	go.uber.org/zap v1.26.0
 	google.golang.org/protobuf v1.25.0
